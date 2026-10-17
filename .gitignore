@@ -1,0 +1,26 @@
+# Dependencies
+node_modules/
+
+# Build output (attach main.js, manifest.json and styles.css to GitHub releases instead)
+main.js
+*.map
+*.tsbuildinfo
+
+# Local sandbox vault used to try the plugin, and the plugin data it creates
+test-vault/
+data.json
+
+# Test and tooling output
+coverage/
+*.log
+
+# Editor and OS files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Secrets and local tool settings
+.env
+.env.*
+.claude/
