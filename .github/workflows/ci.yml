@@ -4,6 +4,8 @@ on:
   pull_request:
   push:
     branches: [main]
+    # A release tag runs the same checks, including that the tag matches the manifest version.
+    tags: ['*']
 
 permissions:
   contents: read
