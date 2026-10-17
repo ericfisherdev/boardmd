@@ -1,4 +1,4 @@
-import { App, ButtonComponent, Modal, Setting } from 'obsidian';
+import { App, ButtonComponent, Modal } from 'obsidian';
 import { reportError } from '../reportError';
 
 /**
@@ -23,14 +23,13 @@ export abstract class FormModal extends Modal {
 		this.contentEl.empty();
 		this.contentEl.addClass('obsidiboard-form');
 		this.renderFields(this.contentEl);
-		new Setting(this.contentEl).addButton((button) => {
-			this.submitButton = button;
-			button
-				.setButtonText(this.submitLabel)
-				.setCta()
-				.setDisabled(!this.submitEnabled)
-				.onClick(() => void this.submit());
-		});
+		// The button sits below the scrolling form, so it stays in view however tall the form is.
+		const footer = this.modalEl.createDiv({ cls: 'modal-button-container obsidiboard-form-footer' });
+		this.submitButton = new ButtonComponent(footer)
+			.setButtonText(this.submitLabel)
+			.setCta()
+			.setDisabled(!this.submitEnabled)
+			.onClick(() => void this.submit());
 	}
 
 	/** Greys out the submit button (and ignores Enter) while the form cannot be submitted. */

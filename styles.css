@@ -373,9 +373,27 @@
 
 /* Forms and settings */
 
-.obsidiboard-form .obsidiboard-wide-input {
+.obsidiboard-wide-input {
 	width: 100%;
 	min-width: 18em;
+}
+
+/* The form scrolls inside the dialog and its button stays below it, so the button is always in view. */
+.modal:has(.obsidiboard-form) {
+	display: flex;
+	flex-direction: column;
+	overflow: hidden;
+}
+
+.modal:has(.obsidiboard-form) .obsidiboard-form {
+	flex: 1 1 auto;
+	min-height: 0;
+	overflow-y: auto;
+}
+
+.obsidiboard-form-footer {
+	flex: none;
+	margin-top: var(--size-4-3);
 }
 
 .obsidiboard-status-list .setting-item {
