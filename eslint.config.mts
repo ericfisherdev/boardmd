@@ -31,4 +31,10 @@ export default defineConfig(
 		},
 	},
 	...obsidianmd.configs.recommended,
+	{
+		// Repository tooling that runs in Node during CI, not inside Obsidian.
+		files: ['scripts/**/*.ts'],
+		languageOptions: { globals: { ...globals.node } },
+		rules: { 'obsidianmd/no-nodejs-modules': 'off' },
+	},
 );

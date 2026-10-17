@@ -9,7 +9,8 @@
 		"build": "tsc -noEmit -skipLibCheck && node esbuild.config.mjs production",
 		"typecheck": "tsc -noEmit -skipLibCheck",
 		"test": "vitest run",
-		"lint": "eslint ."
+		"lint": "eslint .",
+		"check:manifest": "jiti scripts/checkManifest.ts"
 	},
 	"keywords": ["obsidian", "kanban", "scrum", "sprint", "backlog"],
 	"license": "MIT",

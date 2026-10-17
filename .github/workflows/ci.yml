@@ -1,0 +1,50 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+    # A release tag runs the same checks, including that the tag matches the manifest version.
+    tags: ['*']
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  checks:
+    # The job name is what a branch protection rule requires.
+    name: Checks
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      # Fails if package-lock.json is out of step with package.json.
+      - name: Install
+        run: npm ci
+
+      - name: Manifest, package and versions are consistent
+        run: npm run check:manifest
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Test
+        run: npm test
+
+      - name: Build
+        run: npm run build
+
+      - name: Release files were produced
+        run: test -s main.js && test -s manifest.json && test -s styles.css
