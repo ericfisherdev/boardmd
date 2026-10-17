@@ -22,6 +22,7 @@ const LINK: RepositoryLink = {
 	path: 'octo/spoon',
 	tokenSecretId: null,
 	includeClosed: false,
+	trustDescriptions: false,
 	lastPulledAt: null,
 };
 
@@ -90,7 +91,7 @@ describe('IssuePullCommands', () => {
 			created: '2026-10-16',
 		});
 		expect(issues.get('AL-4')).toMatchObject({ summary: 'Remote 7', type: 'bug', assignee: 'ada', rank: 4000 });
-		expect(issues.descriptions.get('AL-3')).toBe('Body 3');
+		expect(issues.descriptions.get('AL-3')).toBe('```text\nBody 3\n```');
 	});
 
 	it('does not import the same issue twice, and updates what the repository owns', async () => {
@@ -166,26 +167,27 @@ describe('RepositoryLinkCommands', () => {
 
 	it('links a repository from its web address', async () => {
 		registry.activeProject = 'Beta';
-		await commands.link({ provider: RepositoryProvider.GitLab, url: 'https://gitlab.example.com/team/app/-/issues', tokenSecretId: 'gl', includeClosed: true });
+		await commands.link({ provider: RepositoryProvider.GitLab, url: 'https://gitlab.example.com/team/app/-/issues', tokenSecretId: 'gl', includeClosed: true, trustDescriptions: false });
 		expect(commands.current()).toEqual({
 			provider: RepositoryProvider.GitLab,
 			host: 'gitlab.example.com',
 			path: 'team/app',
 			tokenSecretId: 'gl',
 			includeClosed: true,
+			trustDescriptions: false,
 			lastPulledAt: null,
 		});
 		expect(registry.projects.get('Alpha')?.repository).toEqual(LINK);
 	});
 
 	it('rejects a bad address and keeps the existing link', async () => {
-		await expect(commands.link({ provider: RepositoryProvider.GitHub, url: 'http://github.com/o/r', tokenSecretId: null, includeClosed: false })).rejects.toThrow(InvalidRepositoryError);
+		await expect(commands.link({ provider: RepositoryProvider.GitHub, url: 'http://github.com/o/r', tokenSecretId: null, includeClosed: false, trustDescriptions: false })).rejects.toThrow(InvalidRepositoryError);
 		expect(commands.current()).toEqual(LINK);
 	});
 
 	it('keeps the pull history when only the token changes, and starts over when the repository or import scope changes', async () => {
 		registry.projects.set('Alpha', { ...(registry.projects.get('Alpha') as ProjectSettings), repository: { ...LINK, lastPulledAt: '2026-10-01T00:00:00.000Z' } });
-		const same = { provider: RepositoryProvider.GitHub, url: 'https://github.com/octo/spoon', includeClosed: false };
+		const same = { provider: RepositoryProvider.GitHub, url: 'https://github.com/octo/spoon', includeClosed: false, trustDescriptions: false };
 		await commands.link({ ...same, tokenSecretId: 'new-token' });
 		expect(commands.current()).toMatchObject({ tokenSecretId: 'new-token', lastPulledAt: '2026-10-01T00:00:00.000Z' });
 		await commands.link({ ...same, tokenSecretId: 'new-token', includeClosed: true });

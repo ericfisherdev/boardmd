@@ -9,6 +9,7 @@ export interface RepositoryLinkInput {
 	readonly url: string;
 	readonly tokenSecretId: string | null;
 	readonly includeClosed: boolean;
+	readonly trustDescriptions: boolean;
 }
 
 /** Links the active project to a hosted repository, or removes the link. */
@@ -38,6 +39,7 @@ export class RepositoryLinkCommands {
 			...address,
 			tokenSecretId: input.tokenSecretId,
 			includeClosed: input.includeClosed,
+			trustDescriptions: input.trustDescriptions,
 			lastPulledAt: sameSource ? previous.lastPulledAt : null,
 		});
 	}

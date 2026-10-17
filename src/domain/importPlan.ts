@@ -86,7 +86,7 @@ function newIssue(issue: RemoteIssue, source: string, link: RepositoryLink, work
 		priority: IssuePriority.Medium,
 		status: closed ? doneStatusId(workflow) : workflow.initialStatus.id,
 		assignee: issue.assignee,
-		description: issue.body.replace(/\r\n?/g, '\n').trim(),
+		description: importedDescription(issue.body, link.trustDescriptions),
 		resolved: closed ? today : null,
 	};
 }
@@ -106,6 +106,19 @@ function changesFor(existing: Issue, remote: RemoteIssue, workflow: Workflow, to
 		...(existing.assignee === remote.assignee ? {} : { assignee: remote.assignee }),
 		...statusChange,
 	};
+}
+
+/**
+ * The note body for an imported description. Unless the repository is trusted, the text goes into a
+ * code block so Obsidian shows it exactly as written and nothing in it is rendered or run. The fence
+ * is longer than any run of backticks in the text, so the text cannot close it early.
+ */
+export function importedDescription(body: string, trusted: boolean): string {
+	const text = body.replace(/\r\n?/g, '\n').trim();
+	if (text === '' || trusted) return text;
+	const longestRun = Math.max(0, ...(text.match(/`+/g) ?? []).map((run) => run.length));
+	const fence = '`'.repeat(Math.max(3, longestRun + 1));
+	return `${fence}text\n${text}\n${fence}`;
 }
 
 function summaryOf(issue: RemoteIssue): string {

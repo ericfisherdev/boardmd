@@ -98,6 +98,7 @@ function sanitizeRepository(value: unknown): RepositoryLink | null {
 		path,
 		tokenSecretId: secretId,
 		includeClosed: data.includeClosed === true,
+		trustDescriptions: data.trustDescriptions === true,
 		lastPulledAt: pulledAt !== null && !Number.isNaN(Date.parse(pulledAt)) ? pulledAt : null,
 	};
 }

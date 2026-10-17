@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { RepositoryIssueSource } from './repositoryFakes';
 import { InvalidRepositoryError, RepositoryRequestError, RepositoryTooLargeError } from '../src/domain/errors';
-import { planImport } from '../src/domain/importPlan';
+import { importedDescription, planImport } from '../src/domain/importPlan';
 import { IssuePriority, IssueType } from '../src/domain/issue';
 import {
 	describeRepository,
@@ -69,7 +69,7 @@ describe('repository addresses', () => {
 });
 
 describe('planImport', () => {
-	const link: RepositoryLink = { provider: GITHUB, host: 'github.com', path: 'octo/spoon', tokenSecretId: null, includeClosed: false, lastPulledAt: null };
+	const link: RepositoryLink = { provider: GITHUB, host: 'github.com', path: 'octo/spoon', tokenSecretId: null, includeClosed: false, trustDescriptions: false, lastPulledAt: null };
 	const workflow = new Workflow(EXTENDED_WORKFLOW);
 	const today = '2026-10-16';
 	const remote = (number: number, overrides: Partial<RemoteIssue> = {}): RemoteIssue => ({
@@ -92,7 +92,7 @@ describe('planImport', () => {
 			['https://github.com/octo/spoon/issues/3', IssueType.Task, 'todo'],
 			['https://github.com/octo/spoon/issues/4', IssueType.Epic, 'todo'],
 		]);
-		expect(result.create[0]).toMatchObject({ priority: IssuePriority.Medium, resolved: null, description: 'Body' });
+		expect(result.create[0]).toMatchObject({ priority: IssuePriority.Medium, resolved: null, description: '```text\nBody\n```' });
 	});
 
 	it('does not match a label that merely contains "bug"', () => {
@@ -106,7 +106,7 @@ describe('planImport', () => {
 	});
 
 	it('normalises line endings and trims the description', () => {
-		expect(plan([remote(1, { body: '\r\n  Line one\r\nLine two  \r\n' })]).create[0]?.description).toBe('Line one\nLine two');
+		expect(plan([remote(1, { body: '\r\n  Line one\r\nLine two  \r\n' })], [], { trustDescriptions: true }).create[0]?.description).toBe('Line one\nLine two');
 		expect(plan([remote(1, { title: '   ' })]).create[0]?.summary).toBe('Issue #1');
 	});
 
@@ -151,6 +151,27 @@ describe('planImport', () => {
 	});
 });
 
+describe('imported descriptions', () => {
+	it('are saved as plain text, so nothing in them is rendered or run', () => {
+		const hostile = '```dataviewjs\ndv.view("steal")\n```\n`$= dv.pages()` ![[Private note]] <iframe src="https://evil.example"></iframe>';
+		const saved = importedDescription(hostile, false);
+		const lines = saved.split('\n');
+		expect(lines[0]).toBe('````text');
+		expect(lines.at(-1)).toBe('````');
+		expect(saved).toContain(hostile);
+	});
+
+	it('use a fence longer than any run of backticks in the text, so the text cannot close it', () => {
+		expect(importedDescription('a ````` b', false)).toBe('``````text\na ````` b\n``````');
+		expect(importedDescription('plain', false)).toBe('```text\nplain\n```');
+	});
+
+	it('are left as written only when the repository is trusted, and an empty description stays empty', () => {
+		expect(importedDescription('  **bold**  ', true)).toBe('**bold**');
+		expect(importedDescription('  \r\n ', false)).toBe('');
+	});
+});
+
 describe('note bodies', () => {
 	it('never start with a frontmatter fence', () => {
 		expect(keepOutOfFrontmatter('---\ntitle: x\n---\ntext')).toBe('\n---\ntitle: x\n---\ntext');
@@ -162,7 +183,7 @@ describe('note bodies', () => {
 
 describe('repository settings', () => {
 	it('keeps a valid link and drops one with an unsafe host or path', () => {
-		const good = { provider: 'gitlab', host: 'gitlab.example.com', path: 'team/app', tokenSecretId: 'gl-token', includeClosed: true, lastPulledAt: '2026-10-16T10:00:00.000Z' };
+		const good = { provider: 'gitlab', host: 'gitlab.example.com', path: 'team/app', tokenSecretId: 'gl-token', includeClosed: true, trustDescriptions: true, lastPulledAt: '2026-10-16T10:00:00.000Z' };
 		const settings = sanitizeSettings({ projects: { A: { repository: good }, B: { repository: { ...good, host: 'evil.com/@x' } }, C: { repository: { ...good, path: '../x' } }, D: { repository: { ...good, provider: 'bitbucket' } } } });
 		expect(settings.projects.A?.repository).toEqual(good);
 		expect(settings.projects.B?.repository).toBeNull();
@@ -179,6 +200,7 @@ describe('GitHub and GitLab clients', () => {
 		path: 'octo/spoon',
 		tokenSecretId: null,
 		includeClosed: false,
+		trustDescriptions: false,
 		lastPulledAt: null,
 		...overrides,
 	});

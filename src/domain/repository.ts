@@ -16,6 +16,12 @@ export interface RepositoryLink {
 	readonly tokenSecretId: string | null;
 	/** Whether closed issues that are not in the project yet are imported too. */
 	readonly includeClosed: boolean;
+	/**
+	 * Whether imported descriptions are saved as Markdown that Obsidian renders. Off by default: anyone
+	 * who can comment on a public repository could otherwise put active content (Dataview scripts,
+	 * embeds, HTML) into the vault, so descriptions are saved as plain text.
+	 */
+	readonly trustDescriptions: boolean;
 	/** ISO timestamp of the last successful pull; later pulls only ask for issues changed since. */
 	readonly lastPulledAt: string | null;
 }

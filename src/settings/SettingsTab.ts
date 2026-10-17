@@ -22,6 +22,7 @@ interface RepositoryDraft {
 	url: string;
 	tokenSecretId: string | null;
 	includeClosed: boolean;
+	trustDescriptions: boolean;
 }
 
 function hostOf(address: string): string | null {
@@ -133,6 +134,7 @@ export class ObsidiboardSettingTab extends PluginSettingTab {
 			url: linked ? `https://${linked.host}/${linked.path}` : '',
 			tokenSecretId: linked?.tokenSecretId ?? null,
 			includeClosed: linked?.includeClosed ?? false,
+			trustDescriptions: linked?.trustDescriptions ?? false,
 		};
 		new Setting(container).setName('Repository').setHeading();
 		container.createEl('p', {
@@ -167,6 +169,12 @@ export class ObsidiboardSettingTab extends PluginSettingTab {
 			.setName('Also import closed issues')
 			.setDesc('Issues already in the project are always kept in step with their open or closed state.')
 			.addToggle((toggle) => toggle.setValue(draft.includeClosed).onChange((value) => (draft.includeClosed = value)));
+		new Setting(container)
+			.setName('Render descriptions as Markdown')
+			.setDesc(
+				'Off is safer: descriptions are saved as plain text in a code block, so a repository cannot put scripts, embeds or HTML into your vault. Turn it on only for repositories you trust.',
+			)
+			.addToggle((toggle) => toggle.setValue(draft.trustDescriptions).onChange((value) => (draft.trustDescriptions = value)));
 		const actions = new Setting(container);
 		actions.addButton((button) =>
 			button.setButtonText(linked ? 'Save repository' : 'Link repository').setCta().onClick(() =>
