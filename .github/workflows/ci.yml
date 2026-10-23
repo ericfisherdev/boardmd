@@ -4,8 +4,9 @@ on:
   pull_request:
   push:
     branches: [main]
-    # A release tag runs the same checks, including that the tag matches the manifest version.
-    tags: ['*']
+  # The release workflow runs these checks on a release tag, including that the tag matches the
+  # manifest version, before it publishes anything.
+  workflow_call:
 
 permissions:
   contents: read

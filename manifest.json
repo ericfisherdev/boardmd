@@ -3,7 +3,7 @@
 	"name": "Obsidiboard",
 	"version": "0.1.0",
 	"minAppVersion": "1.11.4",
-	"description": "Lightweight Jira-style backlog, sprints and boards. Issues and sprints are plain notes.",
+	"description": "Plan work with a Jira-style backlog, sprints and boards. Issues and sprints are plain notes.",
 	"author": "Eric Fisher",
 	"isDesktopOnly": false
 }

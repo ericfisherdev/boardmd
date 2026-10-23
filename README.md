@@ -17,7 +17,9 @@ A lightweight Jira-style backlog, sprints and board for [Obsidian](https://obsid
 
 ## Install
 
-Obsidiboard is not in the community plugin list yet, and there is no release to download. Build it from source:
+Obsidiboard is not listed in the community plugin directory yet. Once it is, install it from **Settings → Community plugins → Browse** by searching for "Obsidiboard".
+
+Until then, download `main.js`, `manifest.json` and `styles.css` from the [latest release](https://github.com/ericfisherdev/obsidiboard/releases/latest), or build them from source:
 
 ```bash
 git clone https://github.com/ericfisherdev/obsidiboard.git
