@@ -30,7 +30,7 @@ npm run build
 
 Then copy `main.js`, `manifest.json` and `styles.css` into `<your vault>/.obsidian/plugins/boardmd/`, and enable **BoardMD** under Settings → Community plugins.
 
-Requires Obsidian **1.11.4 or later** (the plugin stores access tokens in Obsidian's secret storage). It has only been tried on desktop.
+Requires Obsidian **1.13.0 or later** (the settings use Obsidian's declarative settings, so they show up in settings search). It has only been tried on desktop.
 
 ## Walkthrough
 

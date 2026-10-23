@@ -21,6 +21,7 @@ export abstract class FormModal extends Modal {
 	onOpen(): void {
 		this.titleEl.setText(this.title);
 		this.contentEl.empty();
+		this.modalEl.addClass('boardmd-form-modal');
 		this.contentEl.addClass('boardmd-form');
 		this.renderFields(this.contentEl);
 		// The button sits below the scrolling form, so it stays in view however tall the form is.

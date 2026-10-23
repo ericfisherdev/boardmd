@@ -379,13 +379,13 @@
 }
 
 /* The form scrolls inside the dialog and its button stays below it, so the button is always in view. */
-.modal:has(.boardmd-form) {
+.boardmd-form-modal {
 	display: flex;
 	flex-direction: column;
 	overflow: hidden;
 }
 
-.modal:has(.boardmd-form) .boardmd-form {
+.boardmd-form-modal .boardmd-form {
 	flex: 1 1 auto;
 	min-height: 0;
 	overflow-y: auto;
