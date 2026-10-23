@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { findManifestProblems, ManifestCheckInput } from '../scripts/manifestProblems';
 
 const consistent: ManifestCheckInput = {
-	manifest: { id: 'obsidiboard', version: '1.2.3', minAppVersion: '1.11.4', description: 'Plan work with sprints and boards.' },
+	manifest: { id: 'boardmd', version: '1.2.3', minAppVersion: '1.11.4', description: 'Plan work with sprints and boards.' },
 	packageJson: { version: '1.2.3' },
 	versions: { '1.2.3': '1.11.4', '1.0.0': '1.7.2' },
 	tag: null,

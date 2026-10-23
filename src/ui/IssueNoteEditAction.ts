@@ -4,7 +4,7 @@ import { isIssueKey } from '../domain/issueKey';
 import { BoardLocations } from '../infrastructure/boardLocations';
 import { IssueDialogs } from './IssueDialogs';
 
-const HIDDEN_CLASS = 'obsidiboard-hidden';
+const HIDDEN_CLASS = 'boardmd-hidden';
 
 /**
  * Adds an "Edit issue" button to the header of issue notes, and a command that does the same,

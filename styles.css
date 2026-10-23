@@ -1,6 +1,6 @@
-/* Obsidiboard: layout and components. Colours come from Obsidian theme variables. */
+/* BoardMD: layout and components. Colours come from Obsidian theme variables. */
 
-.obsidiboard-view {
+.boardmd-view {
 	--ob-gap: var(--size-4-2);
 	--ob-radius: var(--radius-m);
 	--ob-surface: var(--background-secondary);
@@ -12,84 +12,84 @@
 	overflow: auto;
 }
 
-.obsidiboard-spacer {
+.boardmd-spacer {
 	flex: 1 1 auto;
 }
 
-.obsidiboard-muted {
+.boardmd-muted {
 	color: var(--text-muted);
 	font-size: var(--font-ui-small);
 }
 
 /* Toolbar */
 
-.obsidiboard-toolbar {
+.boardmd-toolbar {
 	display: flex;
 	align-items: center;
 	flex-wrap: wrap;
 	gap: var(--ob-gap);
 }
 
-.obsidiboard-toolbar h2 {
+.boardmd-toolbar h2 {
 	margin: 0 var(--size-4-2) 0 0;
 	font-size: var(--font-ui-large);
 }
 
-.obsidiboard-toolbar button {
+.boardmd-toolbar button {
 	display: inline-flex;
 	align-items: center;
 	gap: var(--size-2-2);
 }
 
-.obsidiboard-button-icon {
+.boardmd-button-icon {
 	display: inline-flex;
 }
 
-.obsidiboard-button-icon .svg-icon {
+.boardmd-button-icon .svg-icon {
 	width: var(--icon-s);
 	height: var(--icon-s);
 }
 
-.obsidiboard-filter {
+.boardmd-filter {
 	min-width: 12em;
 }
 
 /* Backlog sections */
 
-.obsidiboard-backlog-body {
+.boardmd-backlog-body {
 	display: flex;
 	flex-direction: column;
 	gap: var(--size-4-3);
 }
 
-.obsidiboard-section {
+.boardmd-section {
 	border: 1px solid var(--ob-border);
 	border-radius: var(--ob-radius);
 	background: var(--ob-surface);
 	padding: var(--size-4-2);
 }
 
-.obsidiboard-section.is-active {
+.boardmd-section.is-active {
 	border-color: var(--interactive-accent);
 }
 
-.obsidiboard-section-header {
+.boardmd-section-header {
 	display: flex;
 	align-items: center;
 	flex-wrap: wrap;
 	gap: var(--ob-gap);
 }
 
-.obsidiboard-section-header h3 {
+.boardmd-section-header h3 {
 	margin: 0;
 	font-size: var(--font-ui-medium);
 }
 
-.obsidiboard-collapse {
+.boardmd-collapse {
 	flex: none;
 }
 
-.obsidiboard-sprint-state {
+.boardmd-sprint-state {
 	padding: 0 var(--size-4-2);
 	border-radius: var(--radius-l);
 	font-size: var(--font-ui-smaller);
@@ -97,18 +97,18 @@
 	color: var(--text-muted);
 }
 
-.obsidiboard-sprint-state.is-active {
+.boardmd-sprint-state.is-active {
 	background: var(--interactive-accent);
 	color: var(--text-on-accent);
 }
 
-.obsidiboard-goal {
+.boardmd-goal {
 	margin: var(--size-2-2) 0 0 var(--size-4-6);
 	color: var(--text-muted);
 	font-style: italic;
 }
 
-.obsidiboard-list {
+.boardmd-list {
 	display: flex;
 	flex-direction: column;
 	gap: var(--size-2-1);
@@ -116,7 +116,7 @@
 	min-height: var(--size-4-8);
 }
 
-.obsidiboard-empty {
+.boardmd-empty {
 	padding: var(--size-4-3);
 	border: 1px dashed var(--ob-border);
 	border-radius: var(--ob-radius);
@@ -124,7 +124,7 @@
 	text-align: center;
 }
 
-.obsidiboard-add-issue {
+.boardmd-add-issue {
 	margin-top: var(--size-2-2);
 	width: auto;
 	color: var(--text-muted);
@@ -132,108 +132,108 @@
 
 /* Issue rows and cards */
 
-.obsidiboard-row,
-.obsidiboard-card {
+.boardmd-row,
+.boardmd-card {
 	cursor: pointer;
 	border: 1px solid var(--ob-border);
 	background: var(--background-primary);
 	border-radius: var(--radius-s);
 }
 
-.obsidiboard-row:hover,
-.obsidiboard-card:hover {
+.boardmd-row:hover,
+.boardmd-card:hover {
 	background: var(--background-modifier-hover);
 }
 
-.obsidiboard-row:focus-visible,
-.obsidiboard-card:focus-visible {
+.boardmd-row:focus-visible,
+.boardmd-card:focus-visible {
 	outline: 2px solid var(--interactive-accent);
 	outline-offset: 1px;
 }
 
-.obsidiboard-row {
+.boardmd-row {
 	display: flex;
 	align-items: center;
 	gap: var(--ob-gap);
 	padding: var(--size-2-3) var(--size-4-2);
 }
 
-.obsidiboard-row .obsidiboard-summary {
+.boardmd-row .boardmd-summary {
 	flex: 1 1 auto;
 	overflow: hidden;
 	text-overflow: ellipsis;
 	white-space: nowrap;
 }
 
-.obsidiboard-card {
+.boardmd-card {
 	display: flex;
 	flex-direction: column;
 	gap: var(--size-4-2);
 	padding: var(--size-4-2);
 }
 
-.obsidiboard-card-tags,
-.obsidiboard-card-footer {
+.boardmd-card-tags,
+.boardmd-card-footer {
 	display: flex;
 	align-items: center;
 	flex-wrap: wrap;
 	gap: var(--size-2-3);
 }
 
-.obsidiboard-card-tags:empty {
+.boardmd-card-tags:empty {
 	display: none;
 }
 
-.obsidiboard-row.is-dragging,
-.obsidiboard-card.is-dragging {
+.boardmd-row.is-dragging,
+.boardmd-card.is-dragging {
 	opacity: 0.45;
 }
 
-.obsidiboard-drop-before {
+.boardmd-drop-before {
 	box-shadow: 0 -3px 0 0 var(--interactive-accent);
 }
 
-.obsidiboard-drop-at-end {
+.boardmd-drop-at-end {
 	box-shadow: inset 0 -3px 0 0 var(--interactive-accent);
 }
 
 /* Badges */
 
-.obsidiboard-key {
+.boardmd-key {
 	color: var(--text-muted);
 	font-size: var(--font-ui-small);
 	font-variant-numeric: tabular-nums;
 	white-space: nowrap;
 }
 
-.obsidiboard-type,
-.obsidiboard-priority,
-.obsidiboard-blocked {
+.boardmd-type,
+.boardmd-priority,
+.boardmd-blocked {
 	display: inline-flex;
 	flex: none;
 }
 
-.obsidiboard-type .svg-icon,
-.obsidiboard-priority .svg-icon,
-.obsidiboard-blocked .svg-icon {
+.boardmd-type .svg-icon,
+.boardmd-priority .svg-icon,
+.boardmd-blocked .svg-icon {
 	width: var(--icon-s);
 	height: var(--icon-s);
 }
 
-.obsidiboard-type-story { color: var(--color-green); }
-.obsidiboard-type-task { color: var(--color-blue); }
-.obsidiboard-type-bug { color: var(--color-red); }
-.obsidiboard-type-epic { color: var(--color-purple); }
+.boardmd-type-story { color: var(--color-green); }
+.boardmd-type-task { color: var(--color-blue); }
+.boardmd-type-bug { color: var(--color-red); }
+.boardmd-type-epic { color: var(--color-purple); }
 
-.obsidiboard-priority-highest,
-.obsidiboard-priority-high { color: var(--color-red); }
-.obsidiboard-priority-medium { color: var(--color-orange); }
-.obsidiboard-priority-low,
-.obsidiboard-priority-lowest { color: var(--color-blue); }
+.boardmd-priority-highest,
+.boardmd-priority-high { color: var(--color-red); }
+.boardmd-priority-medium { color: var(--color-orange); }
+.boardmd-priority-low,
+.boardmd-priority-lowest { color: var(--color-blue); }
 
-.obsidiboard-blocked { color: var(--color-red); }
+.boardmd-blocked { color: var(--color-red); }
 
-.obsidiboard-status {
+.boardmd-status {
 	flex: none;
 	padding: 0 var(--size-4-2);
 	border-radius: var(--radius-s);
@@ -245,18 +245,18 @@
 	color: var(--text-muted);
 }
 
-.obsidiboard-status-in-progress {
+.boardmd-status-in-progress {
 	background: rgba(var(--color-blue-rgb), 0.18);
 	color: var(--color-blue);
 }
 
-.obsidiboard-status-done {
+.boardmd-status-done {
 	background: rgba(var(--color-green-rgb), 0.18);
 	color: var(--color-green);
 }
 
-.obsidiboard-points,
-.obsidiboard-assignee {
+.boardmd-points,
+.boardmd-assignee {
 	flex: none;
 	min-width: 1.6em;
 	padding: 0 var(--size-2-3);
@@ -267,7 +267,7 @@
 	color: var(--text-muted);
 }
 
-.obsidiboard-parent {
+.boardmd-parent {
 	max-width: 12em;
 	overflow: hidden;
 	text-overflow: ellipsis;
@@ -281,7 +281,7 @@
 
 /* Sprint board */
 
-.obsidiboard-board-body {
+.boardmd-board-body {
 	display: flex;
 	flex-direction: column;
 	gap: var(--ob-gap);
@@ -289,29 +289,29 @@
 	min-height: 0;
 }
 
-.obsidiboard-sprint-header {
+.boardmd-sprint-header {
 	display: flex;
 	align-items: center;
 	flex-wrap: wrap;
 	gap: var(--size-4-4);
 }
 
-.obsidiboard-sprint-header h3 {
+.boardmd-sprint-header h3 {
 	margin: 0;
 }
 
-.obsidiboard-sprint-header .obsidiboard-goal {
+.boardmd-sprint-header .boardmd-goal {
 	margin: 0;
 }
 
-.obsidiboard-sprint-facts {
+.boardmd-sprint-facts {
 	display: flex;
 	flex-direction: column;
 	margin-left: auto;
 	text-align: right;
 }
 
-.obsidiboard-columns {
+.boardmd-columns {
 	display: flex;
 	align-items: stretch;
 	gap: var(--size-4-3);
@@ -321,7 +321,7 @@
 	padding-bottom: var(--size-4-2);
 }
 
-.obsidiboard-column {
+.boardmd-column {
 	display: flex;
 	flex-direction: column;
 	flex: 1 0 14em;
@@ -332,10 +332,10 @@
 	border-top: 3px solid var(--ob-border);
 }
 
-.obsidiboard-column-in-progress { border-top-color: var(--color-blue); }
-.obsidiboard-column-done { border-top-color: var(--color-green); }
+.boardmd-column-in-progress { border-top-color: var(--color-blue); }
+.boardmd-column-done { border-top-color: var(--color-green); }
 
-.obsidiboard-column-header {
+.boardmd-column-header {
 	display: flex;
 	align-items: center;
 	gap: var(--size-4-2);
@@ -347,11 +347,11 @@
 	color: var(--text-muted);
 }
 
-.obsidiboard-count {
+.boardmd-count {
 	font-weight: var(--font-normal);
 }
 
-.obsidiboard-column-list {
+.boardmd-column-list {
 	display: flex;
 	flex-direction: column;
 	gap: var(--size-4-2);
@@ -361,7 +361,7 @@
 	padding: 0 var(--size-4-2) var(--size-4-2);
 }
 
-.obsidiboard-empty-state {
+.boardmd-empty-state {
 	display: flex;
 	flex-direction: column;
 	align-items: center;
@@ -373,41 +373,41 @@
 
 /* Forms and settings */
 
-.obsidiboard-wide-input {
+.boardmd-wide-input {
 	width: 100%;
 	min-width: 18em;
 }
 
 /* The form scrolls inside the dialog and its button stays below it, so the button is always in view. */
-.modal:has(.obsidiboard-form) {
+.modal:has(.boardmd-form) {
 	display: flex;
 	flex-direction: column;
 	overflow: hidden;
 }
 
-.modal:has(.obsidiboard-form) .obsidiboard-form {
+.modal:has(.boardmd-form) .boardmd-form {
 	flex: 1 1 auto;
 	min-height: 0;
 	overflow-y: auto;
 }
 
-.obsidiboard-form-footer {
+.boardmd-form-footer {
 	flex: none;
 	margin-top: var(--size-4-3);
 }
 
-.obsidiboard-status-list .setting-item {
+.boardmd-status-list .setting-item {
 	border-top: none;
 	padding: var(--size-2-2) 0;
 }
 
-.obsidiboard-hidden {
+.boardmd-hidden {
 	display: none;
 }
 
 /* Issue picker (parent and link fields) */
 
-.obsidiboard-picker {
+.boardmd-picker {
 	display: flex;
 	flex-direction: column;
 	align-items: stretch;
@@ -416,17 +416,17 @@
 	max-width: 24em;
 }
 
-.obsidiboard-chips {
+.boardmd-chips {
 	display: flex;
 	flex-direction: column;
 	gap: var(--size-2-2);
 }
 
-.obsidiboard-chips:empty {
+.boardmd-chips:empty {
 	display: none;
 }
 
-.obsidiboard-chip {
+.boardmd-chip {
 	display: flex;
 	align-items: center;
 	gap: var(--size-2-3);
@@ -435,29 +435,29 @@
 	background: var(--background-modifier-hover);
 }
 
-.obsidiboard-chip-summary {
+.boardmd-chip-summary {
 	flex: 1 1 auto;
 	overflow: hidden;
 	text-overflow: ellipsis;
 	white-space: nowrap;
 }
 
-.obsidiboard-chip-remove {
+.boardmd-chip-remove {
 	flex: none;
 }
 
-.obsidiboard-save-status {
+.boardmd-save-status {
 	margin: var(--size-4-2) 0;
 	color: var(--text-muted);
 	font-size: var(--font-ui-small);
 }
 
-.obsidiboard-project-switcher {
+.boardmd-project-switcher {
 	max-width: 14em;
 	text-overflow: ellipsis;
 }
 
-.obsidiboard-form-intro {
+.boardmd-form-intro {
 	margin: 0 0 var(--size-4-2);
 	color: var(--text-muted);
 }

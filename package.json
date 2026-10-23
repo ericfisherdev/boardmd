@@ -1,6 +1,6 @@
 {
-	"name": "obsidiboard",
-	"version": "0.1.0",
+	"name": "boardmd",
+	"version": "0.1.1",
 	"description": "Lightweight Jira-style backlog, sprints and boards for Obsidian, stored as notes.",
 	"main": "main.js",
 	"type": "module",

@@ -1,4 +1,4 @@
-# Obsidiboard
+# BoardMD
 
 A lightweight Jira-style backlog, sprints and board for [Obsidian](https://obsidian.md). Every issue and every sprint is a plain note, so your project data is just Markdown you own: searchable, linkable, and easy for people and AI agents to read and edit.
 
@@ -17,18 +17,18 @@ A lightweight Jira-style backlog, sprints and board for [Obsidian](https://obsid
 
 ## Install
 
-Obsidiboard is not listed in the community plugin directory yet. Once it is, install it from **Settings → Community plugins → Browse** by searching for "Obsidiboard".
+BoardMD is not listed in the community plugin directory yet. Once it is, install it from **Settings → Community plugins → Browse** by searching for "BoardMD".
 
-Until then, download `main.js`, `manifest.json` and `styles.css` from the [latest release](https://github.com/ericfisherdev/obsidiboard/releases/latest), or build them from source:
+Until then, download `main.js`, `manifest.json` and `styles.css` from the [latest release](https://github.com/ericfisherdev/boardmd/releases/latest), or build them from source:
 
 ```bash
-git clone https://github.com/ericfisherdev/obsidiboard.git
-cd obsidiboard
+git clone https://github.com/ericfisherdev/boardmd.git
+cd boardmd
 npm install
 npm run build
 ```
 
-Then copy `main.js`, `manifest.json` and `styles.css` into `<your vault>/.obsidian/plugins/obsidiboard/`, and enable **Obsidiboard** under Settings → Community plugins.
+Then copy `main.js`, `manifest.json` and `styles.css` into `<your vault>/.obsidian/plugins/boardmd/`, and enable **BoardMD** under Settings → Community plugins.
 
 Requires Obsidian **1.11.4 or later** (the plugin stores access tokens in Obsidian's secret storage). It has only been tried on desktop.
 
@@ -180,7 +180,7 @@ Things worth knowing:
 
 ## Pulling issues from GitHub or GitLab
 
-In Settings → Obsidiboard → Repository, choose the service, paste the repository address, optionally pick an access token, and press **Link repository**. Then run **Pull issues** from the backlog toolbar, the command palette, or the settings page.
+In Settings → BoardMD → Repository, choose the service, paste the repository address, optionally pick an access token, and press **Link repository**. Then run **Pull issues** from the backlog toolbar, the command palette, or the settings page.
 
 - New repository issues become backlog issues, with a `source` property holding the issue's web address.
 - Later pulls keep **title, assignee and open/closed state** in step with the repository. Your sprint, rank, points, priority, parent, links and description are never overwritten.
@@ -221,7 +221,7 @@ npm run lint       # eslint with the Obsidian plugin rules
 
 The code is layered: `src/domain` (pure rules), `src/application` (commands and queries over ports), `src/infrastructure` (the vault, frontmatter, agent files, GitHub and GitLab), `src/settings` and `src/ui`, wired together in `src/compose.ts`. Dependencies are passed in through constructors.
 
-To try the plugin, make a throwaway vault, link `main.js`, `manifest.json` and `styles.css` into its `.obsidian/plugins/obsidiboard/` folder, and reload the plugin after each build.
+To try the plugin, make a throwaway vault, link `main.js`, `manifest.json` and `styles.css` into its `.obsidian/plugins/boardmd/` folder, and reload the plugin after each build.
 
 ## License
 
