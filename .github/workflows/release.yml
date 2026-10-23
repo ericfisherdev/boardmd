@@ -22,7 +22,11 @@ jobs:
       id-token: write
       attestations: write
     steps:
+      # Keep the contents:write token off disk while npm ci runs dependency install scripts.
+      # The release step authenticates through GH_TOKEN instead.
       - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
 
       - uses: actions/setup-node@v7
         with:
