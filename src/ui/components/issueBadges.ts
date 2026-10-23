@@ -5,7 +5,7 @@ import { ISSUE_TYPE_PRESENTATION, pointsLabel, PRIORITY_PRESENTATION } from '../
 
 export function renderTypeIcon(parent: HTMLElement, issue: Issue): void {
 	const { label, icon } = ISSUE_TYPE_PRESENTATION[issue.type];
-	const el = parent.createSpan({ cls: `obsidiboard-type obsidiboard-type-${issue.type}`, attr: { 'aria-label': label } });
+	const el = parent.createSpan({ cls: `boardmd-type boardmd-type-${issue.type}`, attr: { 'aria-label': label } });
 	setIcon(el, icon);
 	setTooltip(el, label);
 }
@@ -13,7 +13,7 @@ export function renderTypeIcon(parent: HTMLElement, issue: Issue): void {
 export function renderPriorityIcon(parent: HTMLElement, issue: Issue): void {
 	const { label, icon } = PRIORITY_PRESENTATION[issue.priority];
 	const el = parent.createSpan({
-		cls: `obsidiboard-priority obsidiboard-priority-${issue.priority}`,
+		cls: `boardmd-priority boardmd-priority-${issue.priority}`,
 		attr: { 'aria-label': `${label} priority` },
 	});
 	setIcon(el, icon);
@@ -21,22 +21,22 @@ export function renderPriorityIcon(parent: HTMLElement, issue: Issue): void {
 }
 
 export function renderKey(parent: HTMLElement, issue: Issue): void {
-	parent.createSpan({ cls: 'obsidiboard-key', text: issue.key });
+	parent.createSpan({ cls: 'boardmd-key', text: issue.key });
 }
 
 export function renderStatusPill(parent: HTMLElement, status: StatusDefinition): void {
-	parent.createSpan({ cls: `obsidiboard-status obsidiboard-status-${status.category}`, text: status.name });
+	parent.createSpan({ cls: `boardmd-status boardmd-status-${status.category}`, text: status.name });
 }
 
 export function renderPoints(parent: HTMLElement, issue: Issue): void {
 	if (issue.points === null) return;
-	const el = parent.createSpan({ cls: 'obsidiboard-points', text: String(issue.points) });
+	const el = parent.createSpan({ cls: 'boardmd-points', text: String(issue.points) });
 	setTooltip(el, pointsLabel(issue.points));
 }
 
 export function renderAssignee(parent: HTMLElement, issue: Issue): void {
 	if (issue.assignee === null) return;
-	const el = parent.createSpan({ cls: 'obsidiboard-assignee', text: initials(issue.assignee) });
+	const el = parent.createSpan({ cls: 'boardmd-assignee', text: initials(issue.assignee) });
 	setTooltip(el, issue.assignee);
 }
 
@@ -44,14 +44,14 @@ export function renderAssignee(parent: HTMLElement, issue: Issue): void {
 export function renderBlockedFlag(parent: HTMLElement, openBlockers: readonly string[]): void {
 	if (openBlockers.length === 0) return;
 	const label = `Blocked by ${openBlockers.join(', ')}`;
-	const el = parent.createSpan({ cls: 'obsidiboard-blocked', attr: { 'aria-label': label } });
+	const el = parent.createSpan({ cls: 'boardmd-blocked', attr: { 'aria-label': label } });
 	setIcon(el, 'octagon-alert');
 	setTooltip(el, label);
 }
 
 export function renderParent(parent: HTMLElement, issue: Issue, parentSummary: string | null): void {
 	if (issue.parent === null) return;
-	const el = parent.createSpan({ cls: 'obsidiboard-parent', text: parentSummary ?? issue.parent });
+	const el = parent.createSpan({ cls: 'boardmd-parent', text: parentSummary ?? issue.parent });
 	setTooltip(el, `Parent: ${issue.parent}`);
 }
 

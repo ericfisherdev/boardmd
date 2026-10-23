@@ -24,6 +24,6 @@ export class ProjectFolderWatcher {
 		const change = projectFolderChange(this.locations.projectsFolder, oldPath, newPath);
 		if (change === null) return;
 		const update = change.kind === 'renamed' ? this.registry.renameProject(change.from, change.to) : this.registry.removeProject(change.name);
-		update.catch((error: unknown) => console.error('Obsidiboard: could not update projects after a folder change', error));
+		update.catch((error: unknown) => console.error('BoardMD: could not update projects after a folder change', error));
 	}
 }

@@ -1,14 +1,14 @@
 import { Notice } from 'obsidian';
-import { ObsidiboardError } from '../domain/errors';
+import { BoardMdError } from '../domain/errors';
 
 /** Shows expected failures as a notice; logs anything unexpected. */
 export function reportError(error: unknown): void {
-	if (error instanceof ObsidiboardError) {
+	if (error instanceof BoardMdError) {
 		new Notice(error.message);
 		return;
 	}
-	console.error('Obsidiboard:', error);
-	new Notice('Obsidiboard could not complete that action. See the developer console for details.');
+	console.error('BoardMD:', error);
+	new Notice('That action could not be completed. See the developer console for details.');
 }
 
 /** Runs a fire-and-forget action, reporting any failure. */

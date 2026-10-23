@@ -8,8 +8,8 @@ import { IssueDialogs } from '../IssueDialogs';
 import { IssueMenu } from '../IssueMenu';
 import { reportError, runReporting } from '../reportError';
 
-export const BACKLOG_VIEW_TYPE = 'obsidiboard-backlog';
-export const SPRINT_BOARD_VIEW_TYPE = 'obsidiboard-sprint-board';
+export const BACKLOG_VIEW_TYPE = 'boardmd-backlog';
+export const SPRINT_BOARD_VIEW_TYPE = 'boardmd-sprint-board';
 
 /** Opens the plugin's views; implemented by the plugin. */
 export interface BoardViewOpener {

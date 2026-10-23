@@ -1,13 +1,13 @@
 import { Plugin, WorkspaceLeaf } from 'obsidian';
 import { BoardServices, composeBoard } from './compose';
 import { SettingsStore, sanitizeSettings } from './settings/settings';
-import { ObsidiboardSettingTab } from './settings/SettingsTab';
+import { BoardMdSettingTab } from './settings/SettingsTab';
 import { runReporting } from './ui/reportError';
 import { BacklogView } from './ui/views/BacklogView';
 import { SprintBoardView } from './ui/views/SprintBoardView';
 import { BACKLOG_VIEW_TYPE, BoardViewOpener, SPRINT_BOARD_VIEW_TYPE } from './ui/views/viewSupport';
 
-export default class ObsidiboardPlugin extends Plugin implements BoardViewOpener {
+export default class BoardMdPlugin extends Plugin implements BoardViewOpener {
 	async onload(): Promise<void> {
 		const settings = new SettingsStore(sanitizeSettings(await this.loadData()), (data) => this.saveData(data));
 		const board = composeBoard(this.app, settings);
@@ -29,7 +29,7 @@ export default class ObsidiboardPlugin extends Plugin implements BoardViewOpener
 		this.registerCommands(board);
 		this.addRibbonIcon('list-todo', 'Open backlog', () => runReporting(() => this.openBacklog()));
 		this.addRibbonIcon('kanban', 'Open sprint board', () => runReporting(() => this.openSprintBoard()));
-		this.addSettingTab(new ObsidiboardSettingTab(this.app, this, settings, board.workflowCommands, board.projects, board.projectDialogs, board.repositoryLink, board.issuePullAction));
+		this.addSettingTab(new BoardMdSettingTab(this.app, this, settings, board.workflowCommands, board.projects, board.projectDialogs, board.repositoryLink, board.issuePullAction));
 
 		// The metadata cache is only complete once the workspace is ready.
 		this.app.workspace.onLayoutReady(() => {

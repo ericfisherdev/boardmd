@@ -7,7 +7,7 @@ import { findWorkflowProblems, SIMPLE_WORKFLOW, StatusCategory, StatusDefinition
 import { BoardLocations, locationsFor } from '../infrastructure/boardLocations';
 import { readEnum, readString } from '../infrastructure/frontmatter/values';
 
-export interface ObsidiboardSettings {
+export interface BoardMdSettings {
 	/** Folder holding one subfolder per project. */
 	projectsFolder: string;
 	/** The project the board shows. */
@@ -18,7 +18,7 @@ export interface ObsidiboardSettings {
 }
 
 /** Settings that apply to every project. */
-export type GeneralSettings = Pick<ObsidiboardSettings, 'projectsFolder' | 'writeAgentFiles'>;
+export type GeneralSettings = Pick<BoardMdSettings, 'projectsFolder' | 'writeAgentFiles'>;
 
 export const DEFAULT_PROJECT_NAME = 'My project';
 export const DEFAULT_SPRINT_LENGTH_DAYS = 14;
@@ -26,8 +26,8 @@ export const DEFAULT_SPRINT_LENGTH_DAYS = 14;
 const DEFAULT_PROJECTS_FOLDER = 'Projects';
 
 /** Coerces persisted data (possibly hand-edited or from an older version) into valid settings. */
-export function sanitizeSettings(raw: unknown): ObsidiboardSettings {
-	const data = (typeof raw === 'object' && raw !== null ? raw : {}) as Partial<Record<keyof ObsidiboardSettings, unknown>>;
+export function sanitizeSettings(raw: unknown): BoardMdSettings {
+	const data = (typeof raw === 'object' && raw !== null ? raw : {}) as Partial<Record<keyof BoardMdSettings, unknown>>;
 	const projects = sanitizeProjects(data.projects);
 	const requested = typeof data.activeProject === 'string' ? data.activeProject : '';
 	const known = Object.keys(projects).find((name) => isSameProjectName(name, requested));
@@ -124,18 +124,18 @@ function sanitizeStatuses(value: unknown): StatusDefinition[] {
  * changes what every use case reads and writes without them knowing about projects.
  */
 export class SettingsStore implements BoardConfig, BoardLocations, ProjectRegistry {
-	private current: ObsidiboardSettings;
+	private current: BoardMdSettings;
 	private readonly workflows = new Map<string, Workflow>();
 	private readonly listeners = new Set<() => void>();
 
 	constructor(
-		initial: ObsidiboardSettings,
-		private readonly persist: (settings: ObsidiboardSettings) => Promise<void>,
+		initial: BoardMdSettings,
+		private readonly persist: (settings: BoardMdSettings) => Promise<void>,
 	) {
 		this.current = initial;
 	}
 
-	get settings(): Readonly<ObsidiboardSettings> {
+	get settings(): Readonly<BoardMdSettings> {
 		return this.current;
 	}
 
@@ -187,7 +187,7 @@ export class SettingsStore implements BoardConfig, BoardLocations, ProjectRegist
 	}
 
 	/** Settings holding `projects`, with `activeProject` active and given default settings if it has none. */
-	private withActiveProject(projects: Record<string, ProjectSettings>, activeProject: string): ObsidiboardSettings {
+	private withActiveProject(projects: Record<string, ProjectSettings>, activeProject: string): BoardMdSettings {
 		if (!hasProject(projects, activeProject)) projects[activeProject] = defaultProjectSettings(activeProject, projects);
 		return { ...this.current, projects, activeProject };
 	}
@@ -232,7 +232,7 @@ export class SettingsStore implements BoardConfig, BoardLocations, ProjectRegist
 		return workflow;
 	}
 
-	private async commit(next: ObsidiboardSettings): Promise<void> {
+	private async commit(next: BoardMdSettings): Promise<void> {
 		this.current = next;
 		await this.persist(next);
 		this.listeners.forEach((listener) => listener());

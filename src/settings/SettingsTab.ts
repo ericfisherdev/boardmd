@@ -40,7 +40,7 @@ interface DraftStatus {
 	category: StatusCategory;
 }
 
-export class ObsidiboardSettingTab extends PluginSettingTab {
+export class BoardMdSettingTab extends PluginSettingTab {
 	private draft: DraftStatus[] = [];
 
 	constructor(
@@ -157,7 +157,7 @@ export class ObsidiboardSettingTab extends PluginSettingTab {
 			.addText((text) => {
 				urlInput = text.inputEl;
 				text.setPlaceholder('Paste the repository address').setValue(draft.url).onChange((value) => (draft.url = value));
-				text.inputEl.addClass('obsidiboard-wide-input');
+				text.inputEl.addClass('boardmd-wide-input');
 			});
 		new Setting(container)
 			.setName('Access token')
@@ -215,7 +215,7 @@ export class ObsidiboardSettingTab extends PluginSettingTab {
 		const presets = new Setting(container).setName('Start from a preset');
 		presets.addButton((button) => button.setButtonText('To do, in progress, done').onClick(() => this.loadPreset(SIMPLE_WORKFLOW, list)));
 		presets.addButton((button) => button.setButtonText('With blocked, plan created, in review').onClick(() => this.loadPreset(EXTENDED_WORKFLOW, list)));
-		const list = container.createDiv({ cls: 'obsidiboard-status-list' });
+		const list = container.createDiv({ cls: 'boardmd-status-list' });
 		this.renderStatusList(list);
 		new Setting(container)
 			.addButton((button) =>

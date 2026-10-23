@@ -47,7 +47,7 @@ export class StartSprintModal extends FormModal {
 		new Setting(container).setName('Sprint goal').addTextArea((area) => {
 			area.setValue(this.plan.goal).onChange((value) => (this.plan.goal = value));
 			area.inputEl.rows = 3;
-			area.inputEl.addClass('obsidiboard-wide-input');
+			area.inputEl.addClass('boardmd-wide-input');
 		});
 	}
 

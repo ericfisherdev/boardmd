@@ -1,12 +1,12 @@
-const ISSUE_MIME_TYPE = 'application/x-obsidiboard-issue';
+const ISSUE_MIME_TYPE = 'application/x-boardmd-issue';
 const ITEM_SELECTOR = ':scope > [data-issue-key]';
-const DROP_BEFORE_CLASS = 'obsidiboard-drop-before';
-const DROP_AT_END_CLASS = 'obsidiboard-drop-at-end';
+const DROP_BEFORE_CLASS = 'boardmd-drop-before';
+const DROP_AT_END_CLASS = 'boardmd-drop-at-end';
 
 /** Called with the dragged issue and the issue it was dropped in front of (null = at the end). */
 export type IssueDropHandler = (key: string, beforeKey: string | null) => void;
 
-const EMPTY_MESSAGE_SELECTOR = ':scope > .obsidiboard-empty';
+const EMPTY_MESSAGE_SELECTOR = ':scope > .boardmd-empty';
 
 /** The element being dragged right now, so a drop can move it before the data round trip finishes. */
 let draggedElement: HTMLElement | null = null;

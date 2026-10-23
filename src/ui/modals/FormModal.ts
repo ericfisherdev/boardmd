@@ -21,10 +21,10 @@ export abstract class FormModal extends Modal {
 	onOpen(): void {
 		this.titleEl.setText(this.title);
 		this.contentEl.empty();
-		this.contentEl.addClass('obsidiboard-form');
+		this.contentEl.addClass('boardmd-form');
 		this.renderFields(this.contentEl);
 		// The button sits below the scrolling form, so it stays in view however tall the form is.
-		const footer = this.modalEl.createDiv({ cls: 'modal-button-container obsidiboard-form-footer' });
+		const footer = this.modalEl.createDiv({ cls: 'modal-button-container boardmd-form-footer' });
 		this.submitButton = new ButtonComponent(footer)
 			.setButtonText(this.submitLabel)
 			.setCta()

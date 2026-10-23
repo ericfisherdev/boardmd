@@ -87,9 +87,9 @@ export class BacklogView extends ItemView {
 
 	async onOpen(): Promise<void> {
 		this.contentEl.empty();
-		this.contentEl.addClass('obsidiboard-view', 'obsidiboard-backlog');
+		this.contentEl.addClass('boardmd-view', 'boardmd-backlog');
 		this.renderToolbar(this.contentEl);
-		const body = this.contentEl.createDiv({ cls: 'obsidiboard-backlog-body' });
+		const body = this.contentEl.createDiv({ cls: 'boardmd-backlog-body' });
 		keepScroll(body, 'backlog-body');
 		this.bodyEl = body;
 		this.refresh = renderLive(this, this.contentEl, this.deps.feed, () => this.renderBody());
@@ -103,19 +103,19 @@ export class BacklogView extends ItemView {
 	}
 
 	private renderToolbar(parent: HTMLElement): void {
-		const toolbar = parent.createDiv({ cls: 'obsidiboard-toolbar' });
+		const toolbar = parent.createDiv({ cls: 'boardmd-toolbar' });
 		toolbar.createEl('h2', { text: 'Backlog' });
 		this.projectSwitcher = new ProjectSwitcher(toolbar, this.deps.projects, this.deps.projectDialogs);
 		const search = toolbar.createEl('input', {
 			type: 'search',
-			cls: 'obsidiboard-filter',
+			cls: 'boardmd-filter',
 			attr: { placeholder: 'Filter issues', 'aria-label': 'Filter issues' },
 		});
 		search.addEventListener('input', () => {
 			this.filter = search.value;
 			this.refresh();
 		});
-		toolbar.createSpan({ cls: 'obsidiboard-spacer' });
+		toolbar.createSpan({ cls: 'boardmd-spacer' });
 		this.toolbarButton(toolbar, 'Create issue', 'plus', () => this.deps.issueDialogs.create(), true);
 		this.toolbarButton(toolbar, 'Pull issues', 'download', () => this.deps.issuePullAction.run());
 		this.toolbarButton(toolbar, 'Create sprint', 'calendar-plus', () => this.deps.sprintDialogs.create());
@@ -124,7 +124,7 @@ export class BacklogView extends ItemView {
 
 	private toolbarButton(parent: HTMLElement, label: string, icon: string, onClick: () => void, primary = false): void {
 		const button = parent.createEl('button', { cls: primary ? 'mod-cta' : '' });
-		setIcon(button.createSpan({ cls: 'obsidiboard-button-icon' }), icon);
+		setIcon(button.createSpan({ cls: 'boardmd-button-icon' }), icon);
 		button.createSpan({ text: label });
 		button.addEventListener('click', onClick);
 	}
@@ -165,29 +165,29 @@ export class BacklogView extends ItemView {
 
 	private renderSection(parent: HTMLElement, spec: SectionSpec, toItem: (issue: Issue) => IssueItemModel): void {
 		const isCollapsed = this.collapsed.has(spec.id);
-		const section = parent.createDiv({ cls: 'obsidiboard-section' });
+		const section = parent.createDiv({ cls: 'boardmd-section' });
 		section.toggleClass('is-active', spec.sprint?.state === SprintState.Active);
 		this.renderSectionHeader(section, spec, isCollapsed);
-		if (spec.sprint?.goal) section.createDiv({ cls: 'obsidiboard-goal', text: spec.sprint.goal });
+		if (spec.sprint?.goal) section.createDiv({ cls: 'boardmd-goal', text: spec.sprint.goal });
 		if (isCollapsed) return;
 		const sprintName = spec.sprint?.name ?? null;
-		const list = section.createDiv({ cls: 'obsidiboard-list' });
+		const list = section.createDiv({ cls: 'boardmd-list' });
 		makeIssueDropList(list, (key, beforeKey) =>
 			runDrop(() => this.deps.issueCommands.move(key, sprintName, beforeKey), () => this.refresh()),
 		);
 		const visible = spec.issues.filter((issue) => matchesFilter(issue, this.filter));
 		visible.forEach((issue) => this.rows.attach(list, toItem(issue)));
 		if (visible.length === 0) {
-			list.createDiv({ cls: 'obsidiboard-empty', text: sprintName ? 'Drag issues here to plan them into this sprint.' : 'The backlog is empty.' });
+			list.createDiv({ cls: 'boardmd-empty', text: sprintName ? 'Drag issues here to plan them into this sprint.' : 'The backlog is empty.' });
 		}
-		const add = section.createEl('button', { cls: 'obsidiboard-add-issue clickable-icon', text: 'Create issue' });
+		const add = section.createEl('button', { cls: 'boardmd-add-issue clickable-icon', text: 'Create issue' });
 		add.addEventListener('click', () => this.deps.issueDialogs.create(sprintName));
 	}
 
 	private renderSectionHeader(section: HTMLElement, spec: SectionSpec, isCollapsed: boolean): void {
-		const header = section.createDiv({ cls: 'obsidiboard-section-header' });
+		const header = section.createDiv({ cls: 'boardmd-section-header' });
 		const toggle = header.createEl('button', {
-			cls: 'clickable-icon obsidiboard-collapse',
+			cls: 'clickable-icon boardmd-collapse',
 			attr: { 'aria-label': isCollapsed ? `Expand ${spec.title}` : `Collapse ${spec.title}`, 'aria-expanded': String(!isCollapsed) },
 		});
 		setIcon(toggle, isCollapsed ? 'chevron-right' : 'chevron-down');
@@ -197,11 +197,11 @@ export class BacklogView extends ItemView {
 			this.refresh();
 		});
 		header.createEl('h3', { text: spec.title });
-		if (spec.sprint) header.createSpan({ cls: `obsidiboard-sprint-state is-${spec.sprint.state}`, text: SPRINT_STATE_LABEL[spec.sprint.state] });
+		if (spec.sprint) header.createSpan({ cls: `boardmd-sprint-state is-${spec.sprint.state}`, text: SPRINT_STATE_LABEL[spec.sprint.state] });
 		const dates = sprintDates(spec.sprint);
-		if (dates) header.createSpan({ cls: 'obsidiboard-muted', text: dates });
-		header.createSpan({ cls: 'obsidiboard-muted', text: `${spec.issues.length} issues · ${pointsLabel(totalPoints(spec.issues))}` });
-		header.createSpan({ cls: 'obsidiboard-spacer' });
+		if (dates) header.createSpan({ cls: 'boardmd-muted', text: dates });
+		header.createSpan({ cls: 'boardmd-muted', text: `${spec.issues.length} issues · ${pointsLabel(totalPoints(spec.issues))}` });
+		header.createSpan({ cls: 'boardmd-spacer' });
 		if (spec.action) this.renderSectionAction(header, spec.action);
 	}
 

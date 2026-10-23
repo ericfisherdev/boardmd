@@ -33,8 +33,8 @@ export class IssuePicker {
 		private readonly options: IssuePickerOptions,
 	) {
 		this.selected = [...options.initial];
-		const root = container.createDiv({ cls: 'obsidiboard-picker' });
-		this.chipsEl = root.createDiv({ cls: 'obsidiboard-chips' });
+		const root = container.createDiv({ cls: 'boardmd-picker' });
+		this.chipsEl = root.createDiv({ cls: 'boardmd-chips' });
 		const input = root.createEl('input', { type: 'text', attr: { placeholder: options.placeholder, 'aria-label': options.placeholder } });
 		new IssueSuggest(app, input, () => this.suggestionPool(), options.preferEpics ?? false).onSelect((option) => {
 			this.choose(option.key);
@@ -66,10 +66,10 @@ export class IssuePicker {
 		this.chipsEl.empty();
 		for (const key of this.selected) {
 			const option = this.options.candidates.find((candidate) => candidate.key === key);
-			const chip = this.chipsEl.createDiv({ cls: 'obsidiboard-chip' });
-			chip.createSpan({ cls: 'obsidiboard-key', text: key });
-			if (option) chip.createSpan({ cls: 'obsidiboard-chip-summary', text: option.summary });
-			const remove = chip.createEl('button', { cls: 'clickable-icon obsidiboard-chip-remove', attr: { type: 'button', 'aria-label': `Remove ${key}` } });
+			const chip = this.chipsEl.createDiv({ cls: 'boardmd-chip' });
+			chip.createSpan({ cls: 'boardmd-key', text: key });
+			if (option) chip.createSpan({ cls: 'boardmd-chip-summary', text: option.summary });
+			const remove = chip.createEl('button', { cls: 'clickable-icon boardmd-chip-remove', attr: { type: 'button', 'aria-label': `Remove ${key}` } });
 			setIcon(remove, 'x');
 			remove.addEventListener('click', () => this.remove(key));
 		}
@@ -96,7 +96,7 @@ class IssueSuggest extends AbstractInputSuggest<IssueOption> {
 	}
 
 	renderSuggestion(option: IssueOption, el: HTMLElement): void {
-		el.createSpan({ cls: 'obsidiboard-key', text: option.key });
+		el.createSpan({ cls: 'boardmd-key', text: option.key });
 		el.createSpan({ text: ` ${option.summary}` });
 	}
 

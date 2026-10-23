@@ -83,7 +83,7 @@ export class AgentFilesSync {
 			if (guideStale) await this.writer.writeGuide();
 			if (indexStale) await this.writer.writeIndex();
 		} catch (error) {
-			console.error('Obsidiboard: could not write agent files', error);
+			console.error('BoardMD: could not write agent files', error);
 		}
 	}
 }

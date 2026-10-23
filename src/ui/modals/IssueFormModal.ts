@@ -2,7 +2,7 @@ import { App, Setting } from 'obsidian';
 import { IssueLinkKind, IssueLinks, IssuePriority, IssueType, ISSUE_LINK_KINDS, parseStoryPoints } from '../../domain/issue';
 import { IssueOption, IssuePicker } from '../components/IssuePicker';
 import { ISSUE_TYPE_PRESENTATION, LINK_KIND_HEADING, presentationOptions, PRIORITY_PRESENTATION } from '../labels';
-import { ObsidiboardError } from '../../domain/errors';
+import { BoardMdError } from '../../domain/errors';
 import { reportError } from '../reportError';
 import { AutoSaver, AutoSaveState } from './AutoSaver';
 import { Choice } from './ChoiceModal';
@@ -102,7 +102,7 @@ export class IssueFormModal extends FormModal {
 
 	/** Describe the work first, then optional details, then where it goes. */
 	private renderCreateForm(container: HTMLElement): void {
-		container.createEl('p', { cls: 'obsidiboard-form-intro', text: 'Describe the work. Only the summary is required; everything else can be changed later.' });
+		container.createEl('p', { cls: 'boardmd-form-intro', text: 'Describe the work. Only the summary is required; everything else can be changed later.' });
 		this.renderSummaryField(container);
 		this.renderDescriptionField(container);
 		new Setting(container).setName('Details').setHeading();
@@ -131,7 +131,7 @@ export class IssueFormModal extends FormModal {
 					this.updateSubmitState();
 				}),
 			);
-			text.inputEl.addClass('obsidiboard-wide-input');
+			text.inputEl.addClass('boardmd-wide-input');
 			this.submitOnEnter(text.inputEl);
 			window.setTimeout(() => text.inputEl.focus(), 0);
 		});
@@ -144,7 +144,7 @@ export class IssueFormModal extends FormModal {
 			.addTextArea((area) => {
 				area.setValue(this.values.description).onChange((value) => (this.values.description = value));
 				area.inputEl.rows = 5;
-				area.inputEl.addClass('obsidiboard-wide-input');
+				area.inputEl.addClass('boardmd-wide-input');
 			});
 	}
 
@@ -248,13 +248,13 @@ export class IssueFormModal extends FormModal {
 	}
 
 	private renderSaveStatus(container: HTMLElement): void {
-		this.saveStatusEl = container.createDiv({ cls: 'obsidiboard-save-status', attr: { role: 'status', 'aria-live': 'polite' } });
+		this.saveStatusEl = container.createDiv({ cls: 'boardmd-save-status', attr: { role: 'status', 'aria-live': 'polite' } });
 		this.showSaveState(AutoSaveState.Idle, null);
 	}
 
 	private showSaveState(state: AutoSaveState, error: unknown): void {
 		if (state !== AutoSaveState.Failed) return this.saveStatusEl?.setText(AUTOSAVE_MESSAGE[state]);
-		if (error instanceof ObsidiboardError) this.saveStatusEl?.setText(`Not saved: ${error.message}`);
+		if (error instanceof BoardMdError) this.saveStatusEl?.setText(`Not saved: ${error.message}`);
 		else {
 			this.saveStatusEl?.setText('Not saved. See the developer console for details.');
 			reportError(error);

@@ -33,10 +33,10 @@ export interface IssueItemModel {
 /** Compact single-line row for backlog and sprint lists. */
 export function renderIssueRow(parent: HTMLElement, model: IssueItemModel, actions: IssueItemActions): HTMLElement {
 	const { issue } = model;
-	const row = createInteractiveItem(parent, 'obsidiboard-row', model, actions);
+	const row = createInteractiveItem(parent, 'boardmd-row', model, actions);
 	renderTypeIcon(row, issue);
 	renderKey(row, issue);
-	row.createSpan({ cls: 'obsidiboard-summary', text: issue.summary });
+	row.createSpan({ cls: 'boardmd-summary', text: issue.summary });
 	renderBlockedFlag(row, model.openBlockers);
 	renderParent(row, issue, model.parentSummary);
 	renderStatusPill(row, model.status);
@@ -49,15 +49,15 @@ export function renderIssueRow(parent: HTMLElement, model: IssueItemModel, actio
 /** Card for board columns. */
 export function renderIssueCard(parent: HTMLElement, model: IssueItemModel, actions: IssueItemActions): HTMLElement {
 	const { issue } = model;
-	const card = createInteractiveItem(parent, 'obsidiboard-card', model, actions);
-	card.createDiv({ cls: 'obsidiboard-summary', text: issue.summary });
-	const tags = card.createDiv({ cls: 'obsidiboard-card-tags' });
+	const card = createInteractiveItem(parent, 'boardmd-card', model, actions);
+	card.createDiv({ cls: 'boardmd-summary', text: issue.summary });
+	const tags = card.createDiv({ cls: 'boardmd-card-tags' });
 	renderParent(tags, issue, model.parentSummary);
 	renderBlockedFlag(tags, model.openBlockers);
-	const footer = card.createDiv({ cls: 'obsidiboard-card-footer' });
+	const footer = card.createDiv({ cls: 'boardmd-card-footer' });
 	renderTypeIcon(footer, issue);
 	renderKey(footer, issue);
-	footer.createSpan({ cls: 'obsidiboard-spacer' });
+	footer.createSpan({ cls: 'boardmd-spacer' });
 	renderPriorityIcon(footer, issue);
 	renderPoints(footer, issue);
 	renderAssignee(footer, issue);

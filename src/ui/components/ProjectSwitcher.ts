@@ -13,7 +13,7 @@ export class ProjectSwitcher {
 		private readonly projects: ProjectCommands,
 		private readonly dialogs: ProjectDialogs,
 	) {
-		this.select = parent.createEl('select', { cls: 'dropdown obsidiboard-project-switcher', attr: { 'aria-label': 'Project' } });
+		this.select = parent.createEl('select', { cls: 'dropdown boardmd-project-switcher', attr: { 'aria-label': 'Project' } });
 		this.select.addEventListener('change', () => this.onChange());
 		this.sync();
 	}

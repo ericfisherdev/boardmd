@@ -17,12 +17,12 @@ const list = (values: readonly string[]) => values.map((value) => `\`${value}\``
 export function renderAgentGuide({ workflow, keyPrefix, locations }: AgentGuideInput): string {
 	const statusRows = workflow.statuses.map((s) => `| \`${s.id}\` | ${s.name} | \`${s.category}\` |`).join('\n');
 	const linkKinds = list(Object.values(IssueLinkKind));
-	return `# Obsidiboard data guide
+	return `# BoardMD data guide
 
 > [!info] Generated file
-> Written by the Obsidiboard plugin whenever its settings change. Do not edit; edit the issue and sprint notes instead.
+> Written by the BoardMD plugin whenever its settings change. Do not edit; edit the issue and sprint notes instead.
 
-Obsidiboard is a Jira-style board. This guide covers one project, **${locations.projectName}**; each project is a folder under \`${locations.projectsFolder}\` with its own issues, sprints, workflow and key prefix, and projects never link to each other. Every issue and every sprint is a markdown note whose YAML frontmatter holds its fields.
+BoardMD is a Jira-style board. This guide covers one project, **${locations.projectName}**; each project is a folder under \`${locations.projectsFolder}\` with its own issues, sprints, workflow and key prefix, and projects never link to each other. Every issue and every sprint is a markdown note whose YAML frontmatter holds its fields.
 
 ## Where things are
 

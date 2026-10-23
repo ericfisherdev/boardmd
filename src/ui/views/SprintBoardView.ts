@@ -76,9 +76,9 @@ export class SprintBoardView extends ItemView {
 
 	async onOpen(): Promise<void> {
 		this.contentEl.empty();
-		this.contentEl.addClass('obsidiboard-view', 'obsidiboard-board');
+		this.contentEl.addClass('boardmd-view', 'boardmd-board');
 		this.renderToolbar(this.contentEl);
-		this.bodyEl = this.contentEl.createDiv({ cls: 'obsidiboard-board-body' });
+		this.bodyEl = this.contentEl.createDiv({ cls: 'boardmd-board-body' });
 		this.refresh = renderLive(this, this.contentEl, this.deps.feed, () => this.renderBody());
 	}
 
@@ -90,25 +90,25 @@ export class SprintBoardView extends ItemView {
 	}
 
 	private renderToolbar(parent: HTMLElement): void {
-		const toolbar = parent.createDiv({ cls: 'obsidiboard-toolbar' });
+		const toolbar = parent.createDiv({ cls: 'boardmd-toolbar' });
 		toolbar.createEl('h2', { text: 'Sprint board' });
 		this.projectSwitcher = new ProjectSwitcher(toolbar, this.deps.projects, this.deps.projectDialogs);
 		const search = toolbar.createEl('input', {
 			type: 'search',
-			cls: 'obsidiboard-filter',
+			cls: 'boardmd-filter',
 			attr: { placeholder: 'Filter issues', 'aria-label': 'Filter issues' },
 		});
 		search.addEventListener('input', () => {
 			this.filter = search.value;
 			this.refresh();
 		});
-		toolbar.createSpan({ cls: 'obsidiboard-spacer' });
+		toolbar.createSpan({ cls: 'boardmd-spacer' });
 		const create = toolbar.createEl('button', { cls: 'mod-cta' });
-		setIcon(create.createSpan({ cls: 'obsidiboard-button-icon' }), 'plus');
+		setIcon(create.createSpan({ cls: 'boardmd-button-icon' }), 'plus');
 		create.createSpan({ text: 'Create issue' });
 		create.addEventListener('click', () => this.deps.issueDialogs.create(this.deps.queries.activeBoard()?.sprint.name ?? null));
 		const backlog = toolbar.createEl('button');
-		setIcon(backlog.createSpan({ cls: 'obsidiboard-button-icon' }), 'list-todo');
+		setIcon(backlog.createSpan({ cls: 'boardmd-button-icon' }), 'list-todo');
 		backlog.createSpan({ text: 'Backlog' });
 		backlog.addEventListener('click', () => runReporting(() => this.deps.opener.openBacklog()));
 	}
@@ -127,19 +127,19 @@ export class SprintBoardView extends ItemView {
 
 	private renderBoard(body: HTMLElement, board: BoardModel, toItem: (issue: Issue) => IssueItemModel): void {
 		this.renderSprintHeader(body, board);
-		const columns = body.createDiv({ cls: 'obsidiboard-columns' });
+		const columns = body.createDiv({ cls: 'boardmd-columns' });
 		keepScroll(columns, 'columns');
 		board.columns.forEach((column) => this.renderColumn(columns, column, toItem));
 	}
 
 	private renderSprintHeader(body: HTMLElement, { sprint, columns }: BoardModel): void {
-		const header = body.createDiv({ cls: 'obsidiboard-sprint-header' });
+		const header = body.createDiv({ cls: 'boardmd-sprint-header' });
 		const titleBlock = header.createDiv();
 		titleBlock.createEl('h3', { text: sprint.name });
-		if (sprint.goal) titleBlock.createDiv({ cls: 'obsidiboard-goal', text: sprint.goal });
+		if (sprint.goal) titleBlock.createDiv({ cls: 'boardmd-goal', text: sprint.goal });
 		const issues = columns.flatMap((column) => column.issues);
 		const done = columns.filter((c) => c.status.category === StatusCategory.Done).flatMap((c) => c.issues);
-		const facts = header.createDiv({ cls: 'obsidiboard-muted obsidiboard-sprint-facts' });
+		const facts = header.createDiv({ cls: 'boardmd-muted boardmd-sprint-facts' });
 		facts.createSpan({ text: this.scheduleText(sprint) });
 		facts.createSpan({ text: `${pointsLabel(totalPoints(done))} of ${pointsLabel(totalPoints(issues))} done` });
 		const complete = header.createEl('button', { cls: 'mod-cta', text: 'Complete sprint' });
@@ -155,11 +155,11 @@ export class SprintBoardView extends ItemView {
 
 	private renderColumn(parent: HTMLElement, column: BoardColumn, toItem: (issue: Issue) => IssueItemModel): void {
 		const { status } = column;
-		const columnEl = parent.createDiv({ cls: `obsidiboard-column obsidiboard-column-${status.category}` });
-		const header = columnEl.createDiv({ cls: 'obsidiboard-column-header' });
+		const columnEl = parent.createDiv({ cls: `boardmd-column boardmd-column-${status.category}` });
+		const header = columnEl.createDiv({ cls: 'boardmd-column-header' });
 		header.createSpan({ text: status.name });
-		header.createSpan({ cls: 'obsidiboard-count', text: String(column.issues.length) });
-		const list = columnEl.createDiv({ cls: 'obsidiboard-column-list' });
+		header.createSpan({ cls: 'boardmd-count', text: String(column.issues.length) });
+		const list = columnEl.createDiv({ cls: 'boardmd-column-list' });
 		keepScroll(list, `column-${status.id}`);
 		makeIssueDropList(list, (key, beforeKey) =>
 			runDrop(() => this.deps.issueCommands.placeOnBoard(key, status.id, beforeKey), () => this.refresh()),
@@ -170,7 +170,7 @@ export class SprintBoardView extends ItemView {
 	}
 
 	private renderNoActiveSprint(body: HTMLElement): void {
-		const empty = body.createDiv({ cls: 'obsidiboard-empty-state' });
+		const empty = body.createDiv({ cls: 'boardmd-empty-state' });
 		empty.createEl('h3', { text: 'No active sprint' });
 		empty.createEl('p', { text: 'Plan issues into a sprint from the backlog, then start it.' });
 		const open = empty.createEl('button', { cls: 'mod-cta', text: 'Open backlog' });
