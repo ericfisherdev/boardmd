@@ -288,6 +288,7 @@ export class BoardMdSettingTab extends PluginSettingTab {
 				cls: 'boardmd-status-list',
 				emptyState: 'No statuses. Add one or start from a preset.',
 				items: draft.map((status) => this.statusRow(status)),
+				// Obsidian resolves a row's delete and keyboard-move index from build order, so every reorder rebuilds the list.
 				onReorder: (oldIndex, newIndex) => this.moveStatus(oldIndex, newIndex),
 				onDelete: (index) => {
 					draft.splice(index, 1);
@@ -367,13 +368,13 @@ export class BoardMdSettingTab extends PluginSettingTab {
 		const target = index + offset;
 		if (index < 0 || target < 0 || target >= this.workflowDraft().length) return;
 		this.moveStatus(index, target);
-		this.update();
 	}
 
 	private moveStatus(from: number, to: number): void {
 		const draft = this.workflowDraft();
 		const [moved] = draft.splice(from, 1);
 		if (moved) draft.splice(to, 0, moved);
+		this.update();
 	}
 
 	/**
