@@ -45,8 +45,12 @@ interface DraftStatus {
  * Every row renders itself, because most of them save on blur or through a command rather than per keystroke.
  */
 export class BoardMdSettingTab extends PluginSettingTab {
-	/** The workflow being edited; kept across re-renders and discarded when the tab closes or the workflow is saved. */
-	private draft: DraftStatus[] | null = null;
+	/**
+	 * Unsaved edits survive re-renders of the tab. They are discarded when the tab closes, the
+	 * project changes, or the edit is saved.
+	 */
+	private statusDraft: DraftStatus[] | null = null;
+	private repositoryDraft: RepositoryDraft | null = null;
 
 	constructor(
 		app: App,
@@ -59,6 +63,10 @@ export class BoardMdSettingTab extends PluginSettingTab {
 		private readonly pullAction: IssuePullAction,
 	) {
 		super(app, plugin);
+		// Obsidian keeps the built definitions while settings are closed, so changes made elsewhere
+		// (for example switching project from the board) must rebuild them. While the tab is open,
+		// its own actions rebuild it, and rebuilding on every save would take focus from the field.
+		plugin.register(settings.onChange(() => this.refreshWhileClosed()));
 	}
 
 	getSettingDefinitions(): SettingDefinitionItem[] {
@@ -72,7 +80,18 @@ export class BoardMdSettingTab extends PluginSettingTab {
 
 	hide(): void {
 		super.hide();
-		this.draft = null;
+		this.discardDrafts();
+	}
+
+	private refreshWhileClosed(): void {
+		if (!this.containerEl.isShown()) this.update();
+	}
+
+	/** Drops every unsaved edit, for when the tab closes or now shows a different project. */
+	private discardDrafts(): void {
+		this.statusDraft = null;
+		this.repositoryDraft = null;
+		this.update();
 	}
 
 	private generalSettings(): SettingGroupItem[] {
@@ -110,8 +129,7 @@ export class BoardMdSettingTab extends PluginSettingTab {
 							dropdown.setValue(this.projects.activeProject).onChange((name) =>
 								runReporting(async () => {
 									await this.projects.switchTo(name);
-									this.draft = null;
-									this.update();
+									this.discardDrafts();
 								}),
 							);
 						})
@@ -152,13 +170,7 @@ export class BoardMdSettingTab extends PluginSettingTab {
 	/** Link to a GitHub or GitLab repository whose issues can be pulled into the active project. */
 	private repositorySettings(): SettingGroupItem[] {
 		const linked = this.repositoryLink.current();
-		const draft: RepositoryDraft = {
-			provider: linked?.provider ?? RepositoryProvider.GitHub,
-			url: linked ? `https://${linked.host}/${linked.path}` : '',
-			tokenSecretId: linked?.tokenSecretId ?? null,
-			includeClosed: linked?.includeClosed ?? false,
-			trustDescriptions: linked?.trustDescriptions ?? false,
-		};
+		const draft = this.currentRepositoryDraft();
 		let urlInput: HTMLInputElement | null = null;
 		return [
 			{
@@ -209,12 +221,26 @@ export class BoardMdSettingTab extends PluginSettingTab {
 		];
 	}
 
+	/** The repository form starts from the linked repository, or empty when none is linked. */
+	private currentRepositoryDraft(): RepositoryDraft {
+		const linked = this.repositoryLink.current();
+		this.repositoryDraft ??= {
+			provider: linked?.provider ?? RepositoryProvider.GitHub,
+			url: linked ? `https://${linked.host}/${linked.path}` : '',
+			tokenSecretId: linked?.tokenSecretId ?? null,
+			includeClosed: linked?.includeClosed ?? false,
+			trustDescriptions: linked?.trustDescriptions ?? false,
+		};
+		return this.repositoryDraft;
+	}
+
 	private renderRepositoryActions(setting: Setting, linked: boolean, submitted: () => RepositoryDraft): void {
 		setting.addButton((button) =>
 			button.setButtonText(linked ? 'Save repository' : 'Link repository').setCta().onClick(() =>
 				runReporting(async () => {
 					await this.repositoryLink.link(submitted());
 					new Notice('Repository linked.');
+					this.repositoryDraft = null;
 					this.update();
 				}),
 			),
@@ -226,6 +252,7 @@ export class BoardMdSettingTab extends PluginSettingTab {
 			button.setButtonText('Unlink').onClick(() =>
 				runReporting(async () => {
 					await this.repositoryLink.unlink();
+					this.repositoryDraft = null;
 					this.update();
 				}),
 			);
@@ -257,6 +284,7 @@ export class BoardMdSettingTab extends PluginSettingTab {
 			},
 			{
 				type: 'list',
+				heading: 'Statuses',
 				cls: 'boardmd-status-list',
 				emptyState: 'No statuses. Add one or start from a preset.',
 				items: draft.map((status) => this.statusRow(status)),
@@ -287,14 +315,17 @@ export class BoardMdSettingTab extends PluginSettingTab {
 	}
 
 	private workflowDraft(): DraftStatus[] {
-		this.draft ??= this.settings.workflow.statuses.map((status) => ({ ...status }));
-		return this.draft;
+		this.statusDraft ??= this.settings.workflow.statuses.map((status) => ({ ...status }));
+		return this.statusDraft;
 	}
 
-	/** One status row. Indexes are read when a button is pressed, since dragging can reorder rows after they are built. */
+	/**
+	 * One status row. Its name field is the label, so the row has no separate name. Indexes are read
+	 * when a button is pressed, since dragging can reorder rows after they are built.
+	 */
 	private statusRow(status: DraftStatus): SettingGroupItem {
 		return {
-			name: status.name || 'New status',
+			name: '',
 			searchable: false,
 			render: (setting) =>
 				void setting
@@ -326,7 +357,7 @@ export class BoardMdSettingTab extends PluginSettingTab {
 	}
 
 	private loadPreset(preset: readonly StatusDefinition[]): void {
-		this.draft = preset.map((status) => ({ ...status }));
+		this.statusDraft = preset.map((status) => ({ ...status }));
 		this.update();
 	}
 
@@ -351,7 +382,7 @@ export class BoardMdSettingTab extends PluginSettingTab {
 	private async saveWorkflow(): Promise<void> {
 		const moved = await this.workflowCommands.replace(this.withIds(this.workflowDraft()));
 		new Notice(moved > 0 ? `Workflow saved. ${moved} issues moved to a different status.` : 'Workflow saved.');
-		this.draft = null;
+		this.statusDraft = null;
 		this.update();
 	}
 
