@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { findManifestProblems, ManifestCheckInput } from '../scripts/manifestProblems';
 
 const consistent: ManifestCheckInput = {
-	manifest: { id: 'obsidiboard', version: '1.2.3', minAppVersion: '1.11.4' },
+	manifest: { id: 'obsidiboard', version: '1.2.3', minAppVersion: '1.11.4', description: 'Plan work with sprints and boards.' },
 	packageJson: { version: '1.2.3' },
 	versions: { '1.2.3': '1.11.4', '1.0.0': '1.7.2' },
 	tag: null,
@@ -38,6 +38,16 @@ describe('findManifestProblems', () => {
 	it('rejects a plugin id that contains "obsidian", in any letter case, or no id', () => {
 		expect(findManifestProblems(with_({ manifest: { ...consistent.manifest, id: 'My-Obsidian-Plugin' } }))[0]).toMatch(/must not contain "obsidian"/);
 		expect(findManifestProblems(with_({ manifest: { ...consistent.manifest, id: '' } }))).toEqual(['manifest.json needs an id.']);
+	});
+
+	it('requires a description the community directory accepts', () => {
+		const describedAs = (description: unknown) => findManifestProblems(with_({ manifest: { ...consistent.manifest, description } }));
+		expect(describedAs(undefined)).toEqual(['manifest.json needs a description.']);
+		expect(describedAs('   ')).toEqual(['manifest.json needs a description.']);
+		expect(describedAs(`${'a'.repeat(250)}.`)).toEqual(['manifest.json description is 251 characters; the limit is 250.']);
+		expect(describedAs('Plan work with sprints')).toEqual(['manifest.json description must end with a period.']);
+		expect(describedAs('This is an Obsidian plugin for sprints.')[0]).toMatch(/must start with what the plugin does/);
+		expect(describedAs(`${'a'.repeat(249)}.`)).toEqual([]);
 	});
 
 	it('requires the release tag to be exactly the manifest version', () => {

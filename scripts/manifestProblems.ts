@@ -11,6 +11,8 @@ export interface ManifestCheckInput {
 }
 
 const SEMVER = /^\d+\.\d+\.\d+$/;
+const MAX_DESCRIPTION_LENGTH = 250;
+const PLUGIN_SELF_REFERENCE = /^this (is )?(an? )?(obsidian )?plugin/i;
 
 /** A JSON value as it should read in a message; a missing value reads as `undefined`. */
 function describe(value: unknown): string {
@@ -18,9 +20,26 @@ function describe(value: unknown): string {
 }
 
 /**
+ * The community directory's rules for the manifest description: at most 250 characters, ending
+ * with a period, and opening with what the plugin does rather than "This is a plugin…".
+ */
+function findDescriptionProblems(description: unknown): string[] {
+	if (typeof description !== 'string' || description.trim() === '') return ['manifest.json needs a description.'];
+	const problems: string[] = [];
+	if (description.length > MAX_DESCRIPTION_LENGTH) {
+		problems.push(`manifest.json description is ${description.length} characters; the limit is ${MAX_DESCRIPTION_LENGTH}.`);
+	}
+	if (!description.endsWith('.')) problems.push('manifest.json description must end with a period.');
+	if (PLUGIN_SELF_REFERENCE.test(description)) {
+		problems.push('manifest.json description must start with what the plugin does, not "This is a plugin".');
+	}
+	return problems;
+}
+
+/**
  * Everything that would make the plugin's release inconsistent or unacceptable to the community
- * directory: mismatched versions, a tag that differs from the manifest version, a bad plugin id,
- * missing README or LICENSE. Empty when the repository is ready.
+ * directory: mismatched versions, a tag that differs from the manifest version, a bad plugin id or
+ * description, missing README or LICENSE. Empty when the repository is ready.
  */
 export function findManifestProblems({ manifest, packageJson, versions, tag, missingFiles }: ManifestCheckInput): string[] {
 	const problems: string[] = [];
@@ -32,6 +51,7 @@ export function findManifestProblems({ manifest, packageJson, versions, tag, mis
 	if (typeof minAppVersion !== 'string' || !SEMVER.test(minAppVersion)) problems.push(`manifest.json minAppVersion "${describe(minAppVersion)}" must look like 1.2.3.`);
 	if (typeof id !== 'string' || id === '') problems.push('manifest.json needs an id.');
 	else if (id.toLowerCase().includes('obsidian')) problems.push(`manifest.json id "${id}" must not contain "obsidian".`);
+	problems.push(...findDescriptionProblems(manifest['description']));
 
 	if (packageJson['version'] !== version) {
 		problems.push(`package.json version "${describe(packageJson['version'])}" differs from manifest.json version "${describe(version)}".`);
