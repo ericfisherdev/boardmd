@@ -17,9 +17,9 @@ A lightweight Jira-style backlog, sprints and board for [Obsidian](https://obsid
 
 ## Install
 
-BoardMD is not listed in the community plugin directory yet. Once it is, install it from **Settings → Community plugins → Browse** by searching for "BoardMD".
+BoardMD is listed in the [Obsidian community plugin directory](https://community.obsidian.md/plugins/boardmd). Install it from **Settings → Community plugins → Browse** by searching for "BoardMD", then enable it.
 
-Until then, download `main.js`, `manifest.json` and `styles.css` from the [latest release](https://github.com/ericfisherdev/boardmd/releases/latest), or build them from source:
+To install by hand instead, download `main.js`, `manifest.json` and `styles.css` from the [latest release](https://github.com/ericfisherdev/boardmd/releases/latest), or build them from source:
 
 ```bash
 git clone https://github.com/ericfisherdev/boardmd.git
